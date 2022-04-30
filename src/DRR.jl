@@ -1,5 +1,6 @@
 module DRR
 
-greet() = print("Hello World!")
+export read_dicom
+include("io.jl")
 
 end # module
