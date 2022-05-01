@@ -34,6 +34,7 @@ end
 """
     Ray
 """
+# TODO: Is there some way to make the constructor do the normalization automatically???
 struct Ray_{T<:Real}
     origin::Vec3{T}
     direction::Vec3{T}
