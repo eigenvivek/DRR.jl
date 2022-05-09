@@ -3,7 +3,7 @@ export read_dicom
 using DICOM
 using PaddedViews
 
-function read_dicom(path::String)
+function read_dicom(path::String; pad::Bool=true)
 
     dcm_data_array = dcmdir_parse(path)
 
@@ -45,8 +45,17 @@ function read_dicom(path::String)
         ΔZ = ΔZ[1]
     end
 
-    padVol = PaddedViews.PaddedView(minimum(volume[:,:,1]), volume, (1:(nx+2),1:(ny+2), 1:(n_dcm+2)), (2:(ny+1),2:(ny+1),2:(n_dcm+1)))
+    # Zero-pad the volume if necessary
+    if pad
+        volume = PaddedView(
+            minimum(volume[:, :, 1]),
+            volume,
+            (1:(nx+2), 1:(ny+2), 1:(n_dcm+2)),
+            (2:(ny+1), 2:(ny+1), 2:(n_dcm+1))
+        )
+        volume = Array(volume)
+    end
 
-    return padVol, ΔX, ΔY, ΔZ
+    return volume, ΔX, ΔY, ΔZ
 
 end
