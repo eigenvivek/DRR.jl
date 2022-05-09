@@ -3,7 +3,12 @@ using Test
 
 @testset "DRR.jl" begin
 
-    @test size(DRR.read_dicom("../data/cxr")) == (133, 512, 512)
+    @info "Testing DICOM I/O"
+    @testset "I/O" begin
+        volume, x_spacing, y_spacing, z_spacing = DRR.read_dicom("../data/cxr")
+        @test size(volume) == (133, 512, 512)
+        @test x_spacing == y_spacing
+    end
 
     x = DRR.Vec3(0.0)
     d = DRR.Vec3(1, 1, 0)
