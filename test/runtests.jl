@@ -3,10 +3,10 @@ using Test
 
 @testset "DRR.jl" begin
 
-    @info "Testing DICOM I/O"
+    @info "Testing DICOM I/O..."
     @testset "I/O" begin
         volume, ΔX, ΔY, ΔZ = DRR.read_dicom("../data/cxr")
-        @test size(volume) == (133, 512, 512)
+        @test size(volume) == (512, 512, 133)
         @test ΔX == ΔY
     end
 

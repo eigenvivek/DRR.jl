@@ -5,7 +5,7 @@ using GridInterpolations
 function volume2grid(volume, ΔX, ΔY, ΔZ)
 
     # Construct the RectangleGrid
-    nz, nx, ny = size(volume)
+    nx, ny, nz = size(volume)
     xs = 0:ΔX:(nx-1)*ΔX
     ys = 0:ΔY:(ny-1)*ΔY
     zs = 0:ΔZ:(nz-1)*ΔZ
