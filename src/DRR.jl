@@ -5,6 +5,7 @@ include("ray.jl")
 include("io.jl")
 
 # Interpolation
+include("grid.jl")
 # include("trilinear.jl")
 
 end # module
