@@ -1,6 +1,6 @@
-export Vec3, Ray, trace
+export Vec3, Ray, trace, l2norm, normalize, dotprod
 
-import Base: +, -, *, /, %, promote
+import Base: +, -, *, /, %, length, promote
 
 """
     Vec3
@@ -21,10 +21,11 @@ Vec3(x::Real, y::Real, z::Real) = Vec3(promote(x, y, z)...)
 *(t::Real, p::Vec3) = Vec3(t * p.x, t * p.y, t * p.z)
 *(p::Vec3, t::Real) = *(t::Real, p::Vec3)
 /(p::Vec3, t::Real) = Vec3(p.x / t, p.y / t, p.z / t)
+length(p::Vec3) = 3
 
 @inline -(p::Vec3) = Vec3(-p.x, -p.y, -p.z)
-@inline dot(p1::Vec3, p2::Vec3) = p1.x * p2.x + p1.y * p2.y + p1.z * p2.z
-@inline l2norm(p::Vec3) = sqrt(dot(p, p))
+@inline dotprod(p1::Vec3, p2::Vec3) = p1.x * p2.x + p1.y * p2.y + p1.z * p2.z
+@inline l2norm(p::Vec3) = sqrt(dotprod(p, p))
 @inline normalize(p::Vec3) = p / l2norm(p)
 
 function promote(p1::Vec3, p2::Vec3)
