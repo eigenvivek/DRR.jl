@@ -5,9 +5,9 @@ using Test
 
     @info "Testing DICOM I/O"
     @testset "I/O" begin
-        volume, x_spacing, y_spacing, z_spacing = DRR.read_dicom("../data/cxr")
+        volume, ΔX, ΔY, ΔZ = DRR.read_dicom("../data/cxr")
         @test size(volume) == (133, 512, 512)
-        @test x_spacing == y_spacing
+        @test ΔX == ΔY
     end
 
     x = DRR.Vec3(0.0)

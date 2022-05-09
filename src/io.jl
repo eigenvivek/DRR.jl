@@ -11,7 +11,7 @@ function read_dicom(path::String)
     volume = Array{Int16}(undef, (n_dcm, nx, ny))
 
     # Get the x- and y-directional voxel spacing 
-    x_spacing, y_spacing = dcm_data_array[1][tag"PixelSpacing"]
+    ΔX, ΔY = dcm_data_array[1][tag"PixelSpacing"]
 
     # Find the moving axis
     firstCoord = dcm_data_array[n_dcm][tag"ImagePositionPatient"]
@@ -19,7 +19,7 @@ function read_dicom(path::String)
     gapAxis = findall(x -> x == 0, firstCoord .≈ secondCoord)[1]
 
     gapCoords = Array{Float64}(undef, n_dcm)
-    z_spacing = Array{Float64}(undef, n_dcm - 1)
+    ΔZ = Array{Float64}(undef, n_dcm - 1)
 
     # Read the first slice of volume 
     slice = dcm_data_array[end][tag"PixelData"][end:-1:1, :]
@@ -34,15 +34,15 @@ function read_dicom(path::String)
 
         # find z spacing
         gapCoords[i] = dcm_data_array[end-i+1][tag"ImagePositionPatient"][gapAxis]
-        z_spacing[i-1] = gapCoords[i] - gapCoords[i-1]
+        ΔZ[i-1] = gapCoords[i] - gapCoords[i-1]
 
     end
 
     # Check if the z-directional spacing is constant
-    if all(x ≈ z_spacing[1] for x in z_spacing)
-        z_spacing = z_spacing[1]
+    if all(x ≈ ΔZ[1] for x in ΔZ)
+        ΔZ = ΔZ[1]
     end
 
-    return volume, x_spacing, y_spacing, z_spacing
+    return volume, ΔX, ΔY, ΔZ
 
 end
