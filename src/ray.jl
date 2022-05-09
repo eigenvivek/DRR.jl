@@ -1,3 +1,5 @@
+export Vec3, Ray, trace
+
 import Base: +, -, *, /, %, promote
 
 """

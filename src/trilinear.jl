@@ -1,3 +1,5 @@
+export make_coordinate_matrix, make_inverse_coordinate_matrix, interpolate
+
 using LinearAlgebra
 
 function make_coordinate_matrix(x0, y0, z0, x1, y1, z1)

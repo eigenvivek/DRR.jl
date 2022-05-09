@@ -1,5 +1,6 @@
-using DICOM
+export read_dicom
 
+using DICOM
 
 function read_dicom(path::String)
 
