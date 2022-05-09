@@ -48,6 +48,6 @@ end
 +(r1::Ray_, r2::Ray_) where {T<:Real} = Ray_{T}(r1.origin + r2.origin, r1.direction + r2.direction)
 
 Ray_(origin::Vec3{T}, direction::Vec3{T}, length::Float64) where {T<:Real} = Ray_{T}(origin, direction, length)
-Ray(origin, direction) = Ray_(promote(origin, l2normalize(direction))..., l2norm(direction))
+Ray(origin, direction) = Ray_(promote(origin, direction)..., l2norm(direction))
 
 @inline trace(t::Float64; ray::Ray_{Float64}) = ray.origin + ray.direction * t
