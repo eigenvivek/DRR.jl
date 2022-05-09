@@ -1,4 +1,6 @@
-export make_coordinate_matrix, make_inverse_coordinate_matrix, interpolate
+export make_coordinate_matrix, make_inverse_coordinate_matrix, make_drr
+
+import DRR: interpolate
 
 using LinearAlgebra
 
@@ -31,7 +33,7 @@ function make_inverse_coordinate_matrix(x0, y0, z0, x1, y1, z1)
     return Minv / volume
 end
 
-function interpolate(x, y, z, Minv, c)
+function trilinearinterpolate(x, y, z, Minv, c)
     p = [
         1
         x
@@ -43,4 +45,24 @@ function interpolate(x, y, z, Minv, c)
         x * y * z
     ]
     return dot(p, Minv, c)
+end
+
+
+function raytrace_trilinear(ray, spacing::Float64, grid, pixels)
+    pts = trace.(0:spacing:1; ray=ray)
+    interpolations = interpolate.(pts; grid, pixels)
+    return sum(interpolations) / length(pts)
+end
+
+
+function make_drr(grid, pixels, camera, detector, spacing)
+
+    # Set up the detector plane
+    plane = make_plane(detector)
+    projector = get_rays(camera, plane)
+
+    # Trace rays through the voxel grid
+    drr = [raytrace_trilinear(ray, spacing, grid, pixels) for ray in projector]
+    return drr
+
 end

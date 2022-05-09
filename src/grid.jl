@@ -1,4 +1,6 @@
-export volume2grid
+export volume2grid, interpolate
+
+import GridInterpolations: interpolate
 
 using GridInterpolations
 
@@ -16,3 +18,5 @@ function volume2grid(volume, ΔX, ΔY, ΔZ)
 
     return grid, grid_values
 end
+
+interpolate(pt::Vec3{Float64}; grid, pixels) = interpolate(grid, pixels, [pt.x, pt.y, pt.z])
