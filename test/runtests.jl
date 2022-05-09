@@ -22,5 +22,10 @@ using Test
         include("trilinear.jl")
     end
 
+    @info "Testing camera/detector setup..."
+    @testset "Camera Geometry" begin
+        include("camera.jl")
+    end
+
 end
 

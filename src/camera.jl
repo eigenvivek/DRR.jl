@@ -1,3 +1,7 @@
+export Camera, Detector, make_plane, get_rays
+
+import Base: product
+
 """
     Camera
 """
@@ -30,4 +34,4 @@ function make_plane(detector::Detector)
     zs = findz.(xys; a=detector.normal.x, b=detector.normal.y, c=detector.normal.z, d=d)
     return append.(xys, zs)
 end
-get_rays(plane) = [Ray(camera.center, pixel - camera.center) for pixel in plane]
+get_rays(camera, plane) = [Ray(camera.center, pixel - camera.center) for pixel in plane]
