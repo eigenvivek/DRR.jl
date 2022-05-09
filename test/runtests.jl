@@ -6,7 +6,7 @@ using Test
     @info "Testing DICOM I/O..."
     @testset "I/O" begin
         volume, ΔX, ΔY, ΔZ = DRR.read_dicom("../data/cxr")
-        @test size(volume) == (512, 512, 133)
+        @test size(volume) == (514, 514, 135)
         @test ΔX == ΔY
     end
 

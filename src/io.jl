@@ -1,6 +1,7 @@
 export read_dicom
 
 using DICOM
+using PaddedViews
 
 function read_dicom(path::String)
 
@@ -44,6 +45,8 @@ function read_dicom(path::String)
         ΔZ = ΔZ[1]
     end
 
-    return volume, ΔX, ΔY, ΔZ
+    padVol = PaddedViews.PaddedView(minimum(volume[:,:,1]), volume, (1:(nx+2),1:(ny+2), 1:(n_dcm+2)), (2:(ny+1),2:(ny+1),2:(n_dcm+1)))
+
+    return padVol, ΔX, ΔY, ΔZ
 
 end
