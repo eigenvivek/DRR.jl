@@ -12,4 +12,10 @@ using Test
     @test x == r.origin
     @test d != r.direction
 
+    @info "Testing trilinear interpolation..."
+    @testset "Trilinear Interpolation" begin
+        include("trilinear.jl")
+    end
+
 end
+
