@@ -49,7 +49,7 @@ function get_colors(volume, xidx, yidx, zidx)
 end
 
 
-function interpolate(x::Float64, y::Float64, z::Float64, grid, volume, use_gpu::Bool=false)
+function interpolate(x::Float64, y::Float64, z::Float64, grid, volume, use_gpu::Bool)
 
     # Set the device
     if use_gpu
@@ -89,21 +89,21 @@ interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, gri
 interpolate(pt::Vec3{Float64}; grid, volume, use_gpu) = interpolate(pt.x, pt.y, pt.z, grid, volume, use_gpu)
 
 
-function raytrace_trilinear(ray, spacing::Float64, grid, volume)
+function raytrace_trilinear(ray, spacing::Float64, grid, volume; use_gpu::Bool)
     pts = trace.(0:spacing:1; ray=ray)
-    interpolations = interpolate.(pts; grid, volume)
+    interpolations = interpolate.(pts; grid, volume, use_gpu)
     return sum(interpolations) / length(pts)
 end
 
 
-function make_drr(grid, volume, camera, detector, spacing)
+function make_drr(grid, volume, camera, detector, spacing, use_gpu::Bool=false)
 
     # Set up the detector plane
     plane = make_plane(detector)
     projector = get_rays(camera, plane)
 
     # Trace rays through the voxel grid
-    drr = [raytrace_trilinear(ray, spacing, grid, volume) for ray in projector]
+    drr = [raytrace_trilinear(ray, spacing, grid, volume; use_gpu) for ray in projector]
     return drr
 
 end
