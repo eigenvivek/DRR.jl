@@ -2,6 +2,8 @@ export make_coordinate_matrix, make_inverse_coordinate_matrix, make_drr, raytrac
 
 using LinearAlgebra
 
+import Flux: cpu, gpu
+
 
 function make_coordinate_matrix(x0, y0, z0, x1, y1, z1)
     M = [
@@ -47,7 +49,14 @@ function get_colors(volume, xidx, yidx, zidx)
 end
 
 
-function interpolate(x::Float64, y::Float64, z::Float64, grid, volume)
+function interpolate(x::Float64, y::Float64, z::Float64, grid, volume, use_gpu::Bool=false)
+
+    # Set the device
+    if use_gpu
+        device = gpu
+    else
+        device = cpu
+    end
 
     # Find the indices of the lower left corner of the cube we're inside of
     xs, ys, zs = grid.cutPoints
@@ -66,17 +75,18 @@ function interpolate(x::Float64, y::Float64, z::Float64, grid, volume)
     x1, y1, z1 = xs[xidx+1], ys[yidx+1], zs[zidx+1]
 
     # Get the coordinate matrices
-    Minv = make_inverse_coordinate_matrix(x0, y0, z0, x1, y1, z1)
+    Minv = make_inverse_coordinate_matrix(x0, y0, z0, x1, y1, z1) |> device
 
     # Get the colors of the corners
-    c = get_colors(volume, xidx, yidx, zidx)
+    c = get_colors(volume, xidx, yidx, zidx) |> device
 
     # Get the component vector
-    p = [1; x; y; z; x * y; x * z; y * z; x * y * z]
+    p = [1; x; y; z; x * y; x * z; y * z; x * y * z] |> device
 
     return p' * Minv * c
 end
 interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, grid, volume)
+interpolate(pt::Vec3{Float64}; grid, volume, use_gpu) = interpolate(pt.x, pt.y, pt.z, grid, volume, use_gpu)
 
 
 function raytrace_trilinear(ray, spacing::Float64, grid, volume)

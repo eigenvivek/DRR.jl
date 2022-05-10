@@ -1,11 +1,12 @@
 name = "DRR"
 uuid = "b7cdf4c7-cd72-4265-95a4-eec1a441a985"
-authors = ["v715 <vivek@mit.edu>"]
+authors = ["Vivek Gopalakrishnan <vivek@mit.edu>", "Ruby Liu"]
 version = "0.1.0"
 
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 DICOM = "a26e6606-dd52-5f6a-a97f-4f611373d757"
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 GridInterpolations = "bb4c363b-b914-514b-8517-4eb369bc008a"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PaddedViews = "5432bcbf-9aad-5242-b902-cca2824c8663"
