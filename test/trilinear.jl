@@ -9,12 +9,12 @@ end
 @info "Testing DRR generation..."
 @testset "DRR Generation" begin
     volume, ΔX, ΔY, ΔZ = read_dicom("../data/cxr")
-    grid, pixels = volume2grid(volume, ΔX, ΔY, ΔZ)
+    grid = volume2grid(volume, ΔX, ΔY, ΔZ)
 
     camera = Camera(Vec3(-300.0))
     height, width = 201, 201
     detector = Detector(Vec3(360, 360, 300.0), Vec3(-1.0), height, width, 2, 2)
 
-    drr = make_drr(grid, pixels, camera, detector, 0.1)
+    drr = make_drr(grid, volume, camera, detector, 0.1)
     @test size(drr) == (height, width)
 end
