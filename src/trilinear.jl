@@ -47,13 +47,19 @@ function get_colors(volume, xidx, yidx, zidx)
 end
 
 
-function trilinear_interpolate(x::Float64, y::Float64, z::Float64, grid, volume)
+function interpolate(x::Float64, y::Float64, z::Float64, grid, volume)
 
     # Find the indices of the lower left corner of the cube we're inside of
     xs, ys, zs = grid.cutPoints
     xidx = findlast(xs .<= x)
     yidx = findlast(ys .<= y)
     zidx = findlast(zs .<= z)
+    if any(map(x -> isnothing(x), (xidx, yidx, zidx)))
+        return -1024.0
+    end
+    if xidx == length(xs) || yidx == length(ys) || zidx == length(zs)
+        return -1024.0
+    end
 
     # Get the coordinate values of the lower left and upper right corners
     x0, y0, z0 = xs[xidx], ys[yidx], zs[zidx]
@@ -70,7 +76,7 @@ function trilinear_interpolate(x::Float64, y::Float64, z::Float64, grid, volume)
 
     return p' * Minv * c
 end
-trilinear_interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, grid, volume)
+interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, grid, volume)
 
 
 function raytrace_trilinear(ray, spacing::Float64, grid, volume)
