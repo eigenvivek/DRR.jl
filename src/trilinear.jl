@@ -85,8 +85,8 @@ function interpolate(x::Float64, y::Float64, z::Float64, grid, volume, use_gpu::
 
     return p' * Minv * c
 end
-interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, grid, volume)
-interpolate(pt::Vec3{Float64}; grid, volume, use_gpu) = interpolate(pt.x, pt.y, pt.z, grid, volume, use_gpu)
+interpolate(pt::Vec3{Float64}; grid, volume) = interpolate(pt.x, pt.y, pt.z, grid, volume, false)  # Use CPU
+interpolate(pt::Vec3{Float64}; grid, volume, use_gpu) = interpolate(pt.x, pt.y, pt.z, grid, volume, use_gpu)  # Use CPU or GPU
 
 
 function raytrace_trilinear(ray, spacing::Float64, grid, volume; use_gpu::Bool)
